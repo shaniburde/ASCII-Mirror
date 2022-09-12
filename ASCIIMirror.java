@@ -13,24 +13,23 @@ public class ASCIIMirror {
     private int longestLength;
 
 
-    public void getFilePath() {
-        System.out.println("Input the file path:");
+    public StringBuilder getFilePath() {
         Scanner fileScanner = new Scanner(System.in);
         String pathToFile = fileScanner.nextLine();
         file = new File(pathToFile);
-        createStringList();
+        return tryCreatingFile();
     }
 
-    private void createStringList() {
+    private StringBuilder tryCreatingFile() {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 text.add(line);
             }
             findLongestLine();
-            printFile();
+            return printFile();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
+            return new StringBuilder("File not found!");
         }
     }
 
@@ -44,13 +43,13 @@ public class ASCIIMirror {
         longestLength = longest.length();
     }
 
-    private void printFile() {
+    private StringBuilder printFile() {
+        StringBuilder file = new StringBuilder();
         for (String string : text) {
             String formattedString = String.format("%-" + longestLength + "s", string);
-            System.out.print(formattedString);
-            System.out.print(" | ");
-            System.out.println(reverseText(formattedString));
+            file.append(formattedString).append(" | ").append(reverseText(formattedString)).append("\n");
         }
+        return file;
     }
 
     private String reverseText(String formattedString) {
@@ -92,7 +91,7 @@ public class ASCIIMirror {
                 default:
                     break;
             }
-            }
+        }
         return String.valueOf(reversedArray);
     }
 
